@@ -1,5 +1,5 @@
 This project is licensed under the GNU Affero General Public License Version 3, which can be found in full in LICENSE-AGPL3.txt.
 
-The following works are included with this project and are all licensed under the MIT license, which can be found in full in LICENSE-MIT.txt: uOSC, EasyVirtualMotionCaptureForUnity, UniVRM.
+The following works are included with this project and are all licensed under the MIT license, which can be found in full in LICENSE-MIT.txt: uOSC, EasyVirtualMotionCaptureForUnity, UniVRM, TwitchLib.
 
-The works that are licensed under MIT can be found in the folders labeled: EVMC4U, UniGLTF, VRM, VRM10, VRMShaders
+The works that are licensed under MIT can be found in the folders labeled: Assets/EVMC4U, Assets/UniGLTF, Assets/VRM, Assets/VRM10, Assets/VRMShaders, Assets/TwitchLib
