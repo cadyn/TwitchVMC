@@ -1,0 +1,2 @@
+Assets/StreamingAssets/AuthClient/x64/libcef.dll filter=lfs diff=lfs merge=lfs -text
+Assets/StreamingAssets/AuthClient/x86/libcef.dll filter=lfs diff=lfs merge=lfs -text

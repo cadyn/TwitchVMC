@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using UnityEngine;
+using System.Runtime.InteropServices;
 using UnityEngine.UI;
 
 public class PauseUI : MonoBehaviour
 {
+    public FreeCam freeCamController;
+
     public GameObject pauseMenuRoot;
     public GameObject mainMenu;
 
@@ -15,6 +19,7 @@ public class PauseUI : MonoBehaviour
 
     private bool isPaused = false;
     private int currentMenu = 0;
+    private bool moveWasEnabled = false;
 
     private void Start()
     {
@@ -51,13 +56,13 @@ public class PauseUI : MonoBehaviour
         {
             if (!isPaused)
             {
-                isPaused = true;
+                SetPaused(true);
             }
             else
             {
                 if(currentMenu == 0)
                 {
-                    isPaused = false;
+                    SetPaused(false);
                 } else
                 {
                     ChangeMenu(0);
@@ -67,5 +72,29 @@ public class PauseUI : MonoBehaviour
         }
 
 
+    }
+
+    void SetPaused(bool paused)
+    {
+        if (isPaused && (!paused))
+        {
+            if (moveWasEnabled)
+            {
+                freeCamController.SetMoveEnabled(true);
+                moveWasEnabled = false;
+            }
+            isPaused = false;
+            pauseMenuRoot.SetActive(false);
+        }
+        else if(paused && (!isPaused))
+        {
+            if (freeCamController.GetMoveEnabled())
+            {
+                moveWasEnabled = true;
+                freeCamController.SetMoveEnabled(false);
+            }
+            isPaused = true;
+            pauseMenuRoot.SetActive(true);
+        }
     }
 }

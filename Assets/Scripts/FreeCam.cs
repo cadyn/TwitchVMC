@@ -137,6 +137,13 @@ public class FreeCam : MonoBehaviour
         }
     }
 
+    public void SetMoveEnabled(bool value)
+    {
+        moveEnabled = value;
+    }
+
+    public bool GetMoveEnabled() { return moveEnabled; }
+
     void OnDisable()
     {
         StopLooking();

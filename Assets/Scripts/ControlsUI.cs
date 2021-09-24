@@ -21,11 +21,20 @@ public class ControlsUI : MonoBehaviour
     void UpdateMouseSensitivity()
     {
         mainController.freeLookSensitivity = mouseSensitivitySlider.slider.value;
+        PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivitySlider.slider.value);
     }
 
-    // Update is called once per frame
-    void Update()
+    void LoadSettings()
     {
-        
+        if (PlayerPrefs.HasKey("mouseSensitivity"))
+        {
+            float sensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
+            mouseSensitivitySlider.ChangeValue(sensitivity);
+            UpdateMouseSensitivity();
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivitySlider.slider.value);
+        }
     }
 }

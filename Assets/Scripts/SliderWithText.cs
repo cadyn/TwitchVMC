@@ -50,7 +50,7 @@ public class SliderWithText : MonoBehaviour
 
  
 
-    void ChangeValue(float value)
+    public void ChangeValue(float value)
     {
         text.text = value.ToString("n" + decimals);
         slider.value = value;
