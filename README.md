@@ -17,7 +17,7 @@ Use escape to access settings from the main app window. An additional settings w
 Load your model into VirtualMotionCapture, and tick the box to send it over your local network on the default port. Soon after your model should show up in TwitchVMC.
 To connect with twitch, go to the twitch menu from the main menu, and click authenticate, then sign into your twitch account and authorize the app.
 
-##Planned features:
+## Planned features:
 Soon:
 1. Customizable Twitch Integrations System,, with hopefully usable UI.
 2. System for loading models from a config file, or just from a folder?
