@@ -37,6 +37,7 @@ I will happily accept any bug reports, feature requests, pull requests, or any o
 
 ## Contact
 Cadyn#1469 on discord, this is my most preferred method of communication.
+
 cadyn@lunar.serealia.ca this is what I'm going to be using as my work email, don't expect a quick reply here for now.
 
 ## Donations
