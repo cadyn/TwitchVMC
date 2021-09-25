@@ -72,3 +72,5 @@
 [0924/124922.294:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'interest-cohort'.", source:  (0)
 [0924/130131.785:INFO:CONSOLE(1)] "Download the Apollo DevTools for a better development experience: https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm", source: https://static.twitchcdn.net/assets/vendor-31c188fd825a8136c76f.js (1)
 [0924/130132.392:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'interest-cohort'.", source:  (0)
+[0924/173625.754:INFO:CONSOLE(1)] "Download the Apollo DevTools for a better development experience: https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm", source: https://static.twitchcdn.net/assets/vendor-31c188fd825a8136c76f.js (1)
+[0924/173626.343:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'interest-cohort'.", source:  (0)

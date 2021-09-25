@@ -188,6 +188,7 @@ public class TwitchMaster : MonoBehaviour
                 if (response.IsSuccessStatusCode)
                 {
 					api.Settings.AccessToken = oAuthToken;
+					AuthErrorClear();
 					return true;
                 }
 				return false;
@@ -232,9 +233,7 @@ public class TwitchMaster : MonoBehaviour
 	//Error handling
 	private void AuthErrorNew()
 	{
-		UnityEngine.Debug.Log("Test");
 		TwitchUserError newErr = new TwitchUserError(TwitchUserError.DisplayPoint.MainMenu, "Unable to authenticate with Twitch");
-		UnityEngine.Debug.Log(newErr.errorText);
 		twitchUI.AddError(newErr);
 		authErrors.Add(newErr);
 	}
