@@ -20,7 +20,6 @@ using UnityEngine;
 /// </summary>
 public class FreeCam : MonoBehaviour
 {
-    public GameObject indicator;
     /// <summary>
     /// Normal speed of camera movement.
     /// </summary>
@@ -61,7 +60,6 @@ public class FreeCam : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Z))
         {
             moveEnabled = !moveEnabled;
-            indicator.SetActive(moveEnabled);
         }
 
         if (!moveEnabled)

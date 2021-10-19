@@ -25,7 +25,6 @@
  * SOFTWARE.
  */
 #pragma warning disable 0414,0219
-
 using System;
 using System.Reflection;
 using System.IO;
@@ -39,6 +38,7 @@ using UnityEngine.Profiling;
 using UniVRM10;
 using VRM;
 using UniGLTF;
+
 
 namespace EVMC4U
 {
@@ -684,6 +684,9 @@ namespace EVMC4U
 
                 Model = instance.Root;
 
+                //TwitchVMC Modification
+                addCollider(instance.Root.transform);
+
                 //ExternalReceiverの下にぶら下げる
                 LoadedModelParent = new GameObject();
                 LoadedModelParent.transform.SetParent(transform, false);
@@ -698,6 +701,25 @@ namespace EVMC4U
                 animator = Model.GetComponent<Animator>();
                 HeadPosition = animator.GetBoneTransform(HumanBodyBones.Head).position;
             }, null);
+        }
+
+        //TwitchVMC Modification
+        private void addCollider(Transform parent)
+        {
+            foreach(Transform child in parent)
+            {
+                var boneColliderGroup = child.GetComponent<VRMSpringBoneColliderGroup>();
+                if (boneColliderGroup)
+                {
+                    foreach (VRM.VRMSpringBoneColliderGroup.SphereCollider boneCollider in boneColliderGroup.Colliders) {
+                        var sc = child.gameObject.AddComponent<SphereCollider>();
+                        sc.radius = boneCollider.Radius;
+                        sc.center = boneCollider.Offset;
+                        child.gameObject.tag = "Avatar";
+                    }
+                }
+                addCollider(child);
+            }
         }
 
         //ボーン位置をキャッシュテーブルに基づいて更新
