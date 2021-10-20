@@ -157,7 +157,7 @@ public class TwitchMaster : MonoBehaviour
 
 	private void ObtainNewAuthToken(object sender, ThreadFinishedArgs args)
     {
-		AuthTokenResponse response = JsonConvert.DeserializeObject<AuthTokenResponse>(args.token);
+		AuthTokenResponse response = JsonConvert.DeserializeObject<AuthTokenResponse>(args.output);
 		api.Settings.AccessToken = response.Token;
 		oAuthToken = response.Token;
 		refreshToken = response.Refresh;
@@ -331,10 +331,10 @@ public class StreamString
 
 class ThreadFinishedArgs : EventArgs
 {
-	public string token;
+	public string output;
 	public ThreadFinishedArgs(string input)
     {
-		token = input;
+		output = input;
     }
 }
 class AuthThread

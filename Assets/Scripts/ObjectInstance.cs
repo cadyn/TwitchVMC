@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ObjectInstance : MonoBehaviour
 {
-    public bool throwable = true;
-    public bool droppable = false;
+    public string objectName;
+    public int sets = ObjectConsts.SET_1;
     public bool initializeOnStart = false;
     public float lifetime = 30;
     public AudioClip avatarCollisionClip;
