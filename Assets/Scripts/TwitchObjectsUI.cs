@@ -1,6 +1,3 @@
-#define SET_1 1
-
-
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -42,7 +39,7 @@ public class TwitchObjectsUI : MonoBehaviour
     //3. Maybe save/load from a file, or a resource pack? Could save this for later.
     void Start()
     {
-        objectSets = new();
+        objectSets = new List<List<GameObject>>();
         for(int i = 0; i < 5; i++)
         {
             objectSets.Add(new List<GameObject>());
