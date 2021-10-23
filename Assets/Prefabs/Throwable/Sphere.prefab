@@ -126,7 +126,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179c4e49422c6874290f0877ce8b181c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectName: 
+  modelPath: 
+  sets: 1
+  force: 1
+  objectScale: 1
   initializeOnStart: 1
   lifetime: 30
+  avatarCollisionClipPath: 
+  objectCollisionClipPath: 
+  hitboxType: 0
   avatarCollisionClip: {fileID: 8300000, guid: 943ecfd865800fe47b147479f6c45303, type: 3}
   objectCollisionClip: {fileID: 8300000, guid: b3b134db149d1b4499ee4a793a1d24c8, type: 3}

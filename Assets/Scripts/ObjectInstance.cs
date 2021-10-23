@@ -5,9 +5,15 @@ using UnityEngine;
 public class ObjectInstance : MonoBehaviour
 {
     public string objectName;
+    public string modelPath;
     public int sets = ObjectConsts.SET_1;
+    public float force = 1;
+    public float objectScale = 1;
     public bool initializeOnStart = false;
     public float lifetime = 30;
+    public string avatarCollisionClipPath;
+    public string objectCollisionClipPath;
+    public int hitboxType = -1;
     public AudioClip avatarCollisionClip;
     public AudioClip objectCollisionClip;
 
@@ -27,6 +33,7 @@ public class ObjectInstance : MonoBehaviour
     public void Initialize()
     {
         lifeStarted = Time.time;
+        transform.localScale *= objectScale;
         audioSourceAvatar = gameObject.AddComponent<AudioSource>();
         audioSourceAvatar.clip = avatarCollisionClip;
         audioSourceObject = gameObject.AddComponent<AudioSource>();
