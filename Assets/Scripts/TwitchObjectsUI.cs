@@ -34,9 +34,20 @@ public static class ObjectConsts
     public const int SET_3 = 0x4;
     public const int SET_4 = 0x8;
     public const int SET_5 = 0x10;
+    public const int DEFAULT_SET_1 = 0x20;
+    public const int DEFAULT_SET_2 = 0x40;
     public const int HITBOX_BOX = 0;
     public const int HITBOX_CAPSULE = 1;
     public const int HITBOX_MESH = 2;
+}
+
+public class LaunchArguments
+{
+    public float ForceMultiplier { get; set; }
+    public int ObjectSets { get; set; }
+    public string BodyPart { get; set; }
+    public int NumObjects { get; set; }
+    public float DelayPerObject { get; set; }
 }
 
 public class CustomObject
@@ -367,7 +378,7 @@ public class TwitchObjectsUI : MonoBehaviour
     public AudioClip defaultAvatarClip;
     public AudioClip defaultObjectClip;
     public List<GameObject> defaultObjects;
-    public Transform scrollContent;
+    public RectTransform scrollContent;
     public Button newObjButton;
     public RectTransform newObjButtonTransform;
     public Button testButton;
@@ -380,6 +391,8 @@ public class TwitchObjectsUI : MonoBehaviour
     public List<List<GameObject>> objectSets;
     [HideInInspector]
     public List<CustomObject> customObjects;
+    [HideInInspector]
+    public float curSize = 300;
 
     //TODO LIST:
     //1. JSON Serialize important properties from the objects
@@ -516,7 +529,7 @@ public class TwitchObjectsUI : MonoBehaviour
         }
         GameObject interfaceObj = Instantiate(interfacePrefab,scrollContent);
         RectTransform rt = interfaceObj.GetComponent<RectTransform>();
-        rt.anchoredPosition = new Vector2(-700, 275 - (75 * customObjects.Count));
+        rt.anchoredPosition = new Vector2(-700, (curSize - 25) - (75 * customObjects.Count));
         
         ObjectInstanceUI interfaceUI = interfaceObj.GetComponent<ObjectInstanceUI>();
         interfaceUI.twitchObject = twitchObject;
@@ -531,7 +544,24 @@ public class TwitchObjectsUI : MonoBehaviour
 
     public void UpdateButtonPos()
     {
-        newObjButtonTransform.anchoredPosition = new Vector2(newObjButtonTransform.anchoredPosition.x, 275 - (75 * customObjects.Count));
+        if((curSize - 25) - (75 * customObjects.Count) < -(curSize - 25)) //Extend the scroll content if necessary
+        {
+            curSize += 37.5f;
+            UpdateSizePos();
+        }
+        newObjButtonTransform.anchoredPosition = new Vector2(newObjButtonTransform.anchoredPosition.x, (curSize - 25) - (75 * customObjects.Count));
+    }
+
+    public void UpdateSizePos()
+    {
+        scrollContent.sizeDelta = new Vector2(scrollContent.rect.size.x, curSize * 2);
+        int i = 0;
+        foreach(CustomObject co in customObjects)
+        {
+            RectTransform rt = co.objUI.transform as RectTransform;
+            rt.anchoredPosition = new Vector2(-700, (curSize - 25) - (75 * i));
+            i++;
+        }
     }
 
     public void DeleteObject(CustomObject co, GameObject go)
@@ -563,8 +593,7 @@ public class TwitchObjectsUI : MonoBehaviour
         return true; //To replace with actual verification that the object is valid.
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LaunchAction(LaunchArguments args)
     {
         
     }

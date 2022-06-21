@@ -5,7 +5,9 @@ using TwitchLib.Api;
 using TwitchLib.Api.Helix;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
+using TwitchLib.Api.Helix.Models.Users.GetUserFollows;
 using TwitchLib.Api.Helix.Models.Users.GetUsers;
+using TwitchLib.Api.Helix.Models.Subscriptions;
 using TwitchLib.Api.Core;
 using TwitchLib.Api.Core.Common;
 using TwitchLib.Api.Core.Models;
@@ -129,6 +131,46 @@ public class TwitchMaster : MonoBehaviour
         }
 		string cid = user.Users[0].Id;
 		TwitchLoad(cid);
+	}
+
+	public async Task<string> IsUserSubbedAsync(string userId)
+    {
+		List<string> userIds = new List<string>();
+		userIds.Add(userId);
+		GetUserSubscriptionsResponse response = await api.Helix.Subscriptions.GetUserSubscriptionsAsync(channelId, userIds);
+		if(response.Data.Length > 0)
+        {
+			return response.Data[0].Tier;
+        }
+		return "0000";
+    }
+
+	public async Task<bool> IsUserFollowingAsync(string userId)
+    {
+		GetUsersFollowsResponse response = await api.Helix.Users.GetUsersFollowsAsync(fromId: userId, toId: channelId);
+		if(response.Follows.Length > 0)
+        {
+			return true;
+        }
+		return false;
+    }
+
+	public bool IsUserFollowing(string userId)
+    {
+		return IsUserFollowingAsync(userId).Result;
+    }
+
+	public int GetSubTier(string userId)
+    {
+		string tier = IsUserSubbedAsync(userId).Result;
+		Dictionary<string, int> tiertoint = new Dictionary<string, int>
+		{
+			{"0000", 0},
+			{"1000", 1},
+			{"2000", 2},
+			{"3000", 3},
+		};
+		return tiertoint[tier];
 	}
 
 	//Token creation and save function

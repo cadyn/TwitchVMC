@@ -106,6 +106,9 @@ public class ObjectInstanceUI : MonoBehaviour
         Scale.onEndEdit.AddListener(ScaleChanged);
         Force.onEndEdit.AddListener(ForceChanged);
         Hitbox.onValueChanged.AddListener(HitboxChanged);
+        modelField.extensions = new SFB.ExtensionFilter("GLTF Model", "glb", "gltf");
+        avatarField.extensions = new SFB.ExtensionFilter("MP3 Audio File", "mp3");
+        objectField.extensions = new SFB.ExtensionFilter("MP3 Audio File", "mp3");
     }
     
     public void NameChanged(string newString)
