@@ -38,11 +38,6 @@ I will happily accept any bug reports, feature requests, pull requests, or any o
 ## Contact
 Cadyn#1469 on discord, this is my most preferred method of communication.
 
-cadyn@lunar.serealia.ca this is what I'm going to be using as my work email, don't expect a quick reply here for now.
+## Dead Project
 
-## Donations
-Donations help motivate me to keep working on this project. I may be willing to put one of your requested features ahead of other ones if you donate significant sum, however as the disclaimer states below, don't expect it.
-
-LEGAL DISCLAIMER: Donations are just as they are called, donations. You are giving money to me without expectation of recieving anything in return. I have no responsibility to refund any amount of money, nor to give some special treatment to people who donate.
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate?business=3NEU6BDLYLQR8&no_recurring=0&item_name=TwitchVMC+Development&currency_code=USD)
+This project is currently dead from lack of motivation to keep working on it. I'll be leaving it up incase anyone wants to pick it up. 

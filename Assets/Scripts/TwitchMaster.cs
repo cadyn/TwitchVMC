@@ -5,7 +5,9 @@ using TwitchLib.Api;
 using TwitchLib.Api.Helix;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
+using TwitchLib.Api.Helix.Models.Users.GetUserFollows;
 using TwitchLib.Api.Helix.Models.Users.GetUsers;
+using TwitchLib.Api.Helix.Models.Subscriptions;
 using TwitchLib.Api.Core;
 using TwitchLib.Api.Core.Common;
 using TwitchLib.Api.Core.Models;
@@ -39,7 +41,9 @@ public class TwitchMaster : MonoBehaviour
 	public string clientId = "enrl7herqhjvpoc1qm23uqqh7u3mxa";
 	public TwitchUI twitchUI;
 
-	private string username = "";
+	[HideInInspector]
+	public bool hasAffiliate = false;
+
 	private string channelId;
 	private TwitchPubSub _pubSub;
 	private TwitchAPI api;
@@ -67,8 +71,12 @@ public class TwitchMaster : MonoBehaviour
 	{
 		if (PlayerPrefs.HasKey("oAuthToken") && PlayerPrefs.HasKey("oAuthRefresh"))
 		{
+			//ORIGINAL
 			oAuthToken = PlayerPrefs.GetString("oAuthToken");
 			refreshToken = PlayerPrefs.GetString("oAuthRefresh");
+			//TEMP
+			//oAuthToken = "v0rd6afc61usz3h755w3bx3qsqh4nj";
+			//refreshToken = "545f76bfxz39y30qx013bi1ruvwa4408b1cp6ufnidffc6zj2x";
 			if (await canConnect() && await ValidateAuthToken())
 			{
 				await UpdateUsername();
@@ -97,10 +105,11 @@ public class TwitchMaster : MonoBehaviour
 	}
 
 	//Basic twitch stuff
-	private void TwitchLoad(string channelId)
+	private void TwitchLoad(string channelID)
     {
 		// Connect
-		UnityEngine.Debug.Log(channelId);
+		UnityEngine.Debug.Log(channelID);
+		channelId = channelID;
 		_pubSub.OnPubSubServiceConnected += OnPubSubServiceConnected;
 		_pubSub.OnListenResponse += onListenResponse;
 		_pubSub.Connect();
@@ -116,8 +125,52 @@ public class TwitchMaster : MonoBehaviour
 	public async Task UpdateUsername()
     {
 		GetUsersResponse user = await api.Helix.Users.GetUsersAsync();
+		if(user.Users[0].BroadcasterType.Length > 1) //If they're neither affiliate nor partner, their broadcaster type will return as "".
+        {
+			hasAffiliate = true;
+        }
 		string cid = user.Users[0].Id;
 		TwitchLoad(cid);
+	}
+
+	public async Task<string> IsUserSubbedAsync(string userId)
+    {
+		List<string> userIds = new List<string>();
+		userIds.Add(userId);
+		GetUserSubscriptionsResponse response = await api.Helix.Subscriptions.GetUserSubscriptionsAsync(channelId, userIds);
+		if(response.Data.Length > 0)
+        {
+			return response.Data[0].Tier;
+        }
+		return "0000";
+    }
+
+	public async Task<bool> IsUserFollowingAsync(string userId)
+    {
+		GetUsersFollowsResponse response = await api.Helix.Users.GetUsersFollowsAsync(fromId: userId, toId: channelId);
+		if(response.Follows.Length > 0)
+        {
+			return true;
+        }
+		return false;
+    }
+
+	public bool IsUserFollowing(string userId)
+    {
+		return IsUserFollowingAsync(userId).Result;
+    }
+
+	public int GetSubTier(string userId)
+    {
+		string tier = IsUserSubbedAsync(userId).Result;
+		Dictionary<string, int> tiertoint = new Dictionary<string, int>
+		{
+			{"0000", 0},
+			{"1000", 1},
+			{"2000", 2},
+			{"3000", 3},
+		};
+		return tiertoint[tier];
 	}
 
 	//Token creation and save function
@@ -146,7 +199,7 @@ public class TwitchMaster : MonoBehaviour
 
 	private void ObtainNewAuthToken(object sender, ThreadFinishedArgs args)
     {
-		AuthTokenResponse response = JsonConvert.DeserializeObject<AuthTokenResponse>(args.token);
+		AuthTokenResponse response = JsonConvert.DeserializeObject<AuthTokenResponse>(args.output);
 		api.Settings.AccessToken = response.Token;
 		oAuthToken = response.Token;
 		refreshToken = response.Refresh;
@@ -220,14 +273,29 @@ public class TwitchMaster : MonoBehaviour
 	{
 		UnityEngine.Debug.Log("PubSubServiceConnected!");
 		_pubSub.ListenToFollows(channelId);
-		_pubSub.OnChannelPointsRewardRedeemed += OnChannelPoints;
-
+		_pubSub.OnFollow += OnFollowEvent;
+		//List<string> logins = new List<string>();
+		//GetUsersResponse user = api.Helix.Users.GetUsersAsync(null,logins).Result;
+		//_pubSub.ListenToFollows(user.Users[0].Id);
+		if (hasAffiliate)
+		{
+			_pubSub.ListenToChannelPoints(channelId);
+			_pubSub.OnChannelPointsRewardRedeemed += OnChannelPoints;
+		}
+		
 		_pubSub.SendTopics();
 	}
 
-	public void OnChannelPoints(object sender, OnChannelPointsRewardRedeemedArgs args)
+	public void OnFollowEvent(object sender, OnFollowArgs args)
+    {
+        UnityEngine.Debug.Log("Follow event");
+		UnityEngine.Debug.Log(args.DisplayName);
+    }
+
+    public void OnChannelPoints(object sender, OnChannelPointsRewardRedeemedArgs args)
 	{
 		UnityEngine.Debug.Log("Success!");
+		UnityEngine.Debug.Log(args.RewardRedeemed.Redemption.Reward.Title);
 	}
 
 	//Error handling
@@ -305,17 +373,17 @@ public class StreamString
 
 class ThreadFinishedArgs : EventArgs
 {
-	public string token;
+	public string output;
 	public ThreadFinishedArgs(string input)
     {
-		token = input;
+		output = input;
     }
 }
 class AuthThread
 {
 	public event EventHandler<ThreadFinishedArgs> ThreadDone;
 
-	public void Run()
+	public void Run() //Yea it's synchronous, but on another thread. It is blocking. Unity just doesn't like async pipes for some reason.
 	{
 		string authClientLocation = Path.Combine(UnityEngine.Application.streamingAssetsPath, "AuthClient/TwitchVMCAuthClient.exe");
 		string output;

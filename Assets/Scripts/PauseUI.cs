@@ -16,10 +16,13 @@ public class PauseUI : MonoBehaviour
 
     public List<GameObject> menuList;
     public List<Button> menuButtons;
+    public List<int> subMenuOf;
+
 
     private bool isPaused = false;
     private int currentMenu = 0;
     private bool moveWasEnabled = false;
+
 
     private void Start()
     {
@@ -37,15 +40,23 @@ public class PauseUI : MonoBehaviour
 
     void ChangeMenu(int newMenu)
     {
-        if(newMenu == 0)
+        if (newMenu == 0)
         {
             menuList[currentMenu - 1].SetActive(false);
             mainMenu.SetActive(true);
-        } 
+        }
         else
         {
+            if (currentMenu == 0)
+            {
+                mainMenu.SetActive(false);
+            } 
+            else
+            {
+                menuList[currentMenu - 1].SetActive(false);
+            }
             menuList[newMenu - 1].SetActive(true);
-            mainMenu.SetActive(false);
+            
         }
         currentMenu = newMenu;
     }
@@ -65,7 +76,7 @@ public class PauseUI : MonoBehaviour
                     SetPaused(false);
                 } else
                 {
-                    ChangeMenu(0);
+                    ChangeMenu(subMenuOf[currentMenu-1]);
                 }
             }
             pauseMenuRoot.SetActive(isPaused);
